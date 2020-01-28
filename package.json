@@ -1,0 +1,17 @@
+{
+  "name": "bbcheck",
+  "version": "1.0.0",
+  "description": "Runner for various types of healthcheck",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT",
+  "bin": {
+    "bbcheck": "./index.js"
+  },
+  "dependencies": {
+    "async-mssql-client": "^1.1.0",
+    "core-fu": "0.0.4"
+  }
+}
