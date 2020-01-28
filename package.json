@@ -1,6 +1,6 @@
 {
   "name": "bbcheck",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Runner for various types of healthcheck",
   "main": "index.js",
   "scripts": {

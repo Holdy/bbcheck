@@ -103,7 +103,7 @@ function prepareOutput(results, level) {
         outputResult.subject = result.subject;
         outputResult.context = result.context;
         outputResult.issue = result.issue;
-        outputResult.effect = result.effect;
+        outputResult.impact = result.impact;
         outputResult.basis = result.basis;
         outputResult.proposal = result.proposal;
 
