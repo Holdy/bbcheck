@@ -74,7 +74,7 @@ function prepareOutput(results, level) {
 
         if (level === 'full') {
             Object.keys(result).forEach(key => {
-                if (key.startsWith('evidence-')) {
+                if (key.startsWith('evidence-') || key.startsWith('evidence_')) {
                     outputResult[key] = result[key];
                 }
 
