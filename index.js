@@ -71,6 +71,7 @@ function prepareOutput(results, level) {
         outputResult.issue = result.issue;
         outputResult.effect = result.effect;
         outputResult.basis = result.basis;
+        outputResult.proposal = result.proposal;
 
         if (level === 'full') {
             Object.keys(result).forEach(key => {
