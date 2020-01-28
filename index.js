@@ -4,17 +4,30 @@
 const fs = require('fs');
 const path = require('path');
 
-const packageData = require('./package.json');
 const fu = require('core-fu');
 
+const packageData = require('./package.json');
+const argumentProcessor = require('./lib/argumentProcessor');
 const sqlCheck = require('./sqlCheck');
 
+const switches = processCommandLineArguments();
+
+function processCommandLineArguments() {
+    let { switches, errors, warnings } = argumentProcessor.process(process.argv, require('./lib/command-line-arguments-definition'));
+    argumentProcessor.showErrorsAndWarnings({ errors, warnings });
+
+    if (!switches) {
+        process.exit(1);
+    }
+
+    argumentProcessor.showSwitches({ switches });
+
+    return switches;
+}
 //console.info(`BBCheck - v${packageData.version}`);
 
 function resultLevel() {
-    if (process.argv.length === 3) {
-        return process.argv[2];
-    } 
+    return switches['--output'].values[0];
 }
 
 async function processDirectory(targetDirectory) {
@@ -45,18 +58,39 @@ async function processDirectory(targetDirectory) {
     }
 }
 
+function prepareSummaryOutput(results) {
+    let output = [];
 
-function prepareSimpleOutput(results) {
+    let summaryMap = {};
 
-    return prepareOutput(results, 'simple');
-}
+    results.forEach(result => {
+        let summaryKey = result.context + ':::' + result.issue;
+        let summary = summaryMap[summaryKey];
 
-function prepareFullOutput(results) {
-    return prepareOutput(results, 'full');
+        if (summary) {
+            summary.count++;
+        } else {
+            summary = {
+                "context": result.context,
+                "issue": result.issue,
+                "count": 1
+            };
+            summaryMap[summaryKey] = summary;
+            output.push(summary);
+        }
 
+    });
+
+
+    return output;
 }
 
 function prepareOutput(results, level) {
+    if (level === 'summary') {
+        return prepareSummaryOutput(results);
+    }
+
+
     let output = [];
 
     results.forEach(result => {
@@ -88,15 +122,6 @@ function prepareOutput(results, level) {
 
     });
     return output;
-}
-
-
-function processSqlFile(filePath, results) {
-    let sql = fs.readFileSync(filePath);
-
-
-
-
 }
 
 

@@ -1,6 +1,6 @@
 {
   "name": "bbcheck",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Runner for various types of healthcheck",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "bbcheck": "./index.js"
   },
   "dependencies": {
-    "async-mssql-client": "^1.1.0",
+    "async-mssql-client": "^1.2.0",
     "core-fu": "0.0.4"
   }
 }
