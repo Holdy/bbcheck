@@ -3,6 +3,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const process = require('process');
 
 const fu = require('core-fu');
 
@@ -30,11 +31,24 @@ function resultLevel() {
     return switches['--output'].values[0];
 }
 
+function ensureSqlCredentials() {
+    const env = process.env;
+    if (!env.BBCHECK_SQL_SERVER || !env.BBCHECK_SQL_USERNAME || !env.BBCHECK_SQL_PASSWORD) {
+        console.error('In order to run Sql checks, the following environment variables are required:');
+        console.error('   BBCHECK_SQL_SERVER');
+        console.error('   BBCHECK_SQL_USERNAME');
+        console.error('   BBCHECK_SQL_PASSWORD');
+        process.exit(1);
+    }
+}
+
 async function processDirectory(targetDirectory) {
     let files = fs.readdirSync(targetDirectory);
     let targetFiles = files.filter(fileName => fileName.indexOf('.bbcheck.') !== -1);
 
     if (targetFiles.length > 0) {
+
+        ensureSqlCredentials();
 
         let results = [];
 
@@ -42,6 +56,7 @@ async function processDirectory(targetDirectory) {
             let fullPath = path.join('./', fileName);
 
             if (fullPath.indexOf('.sql') !== -1) {
+                process.stderr.write(`   running ${fullPath}\n`);
                 await sqlCheck.processFileAsync(fullPath, results);
             } else {
                 console.error(`Currently, only sql files are supported.`);
